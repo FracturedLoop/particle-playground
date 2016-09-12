@@ -9,6 +9,7 @@ var canvas = document.getElementById("canvas"),
   orbs = [],
   accelerate = vector.create(1, 1),
   mouse = vector.create(mousePosX, mousePosY),
+  optionsIsOpen = false,
   distance,
   GRAVITY = 0, // how much gravity affects the particles
   PARTICLES = 1000, // the amount of particles generated
@@ -24,6 +25,14 @@ for (var i = 0; i < PARTICLES; i++) {
   orbs[i].radius = RADIUS;
   orbs[i].bounce = -0.9;
 }
+
+Velocity(document.getElementById('options'), {
+  translateY: 0
+});
+Velocity(document.getElementById('options-handle'), {
+  translateY: document.getElementById('options').offsetHeight
+});
+optionsIsOpen = true;
 
 update();
 
@@ -88,6 +97,29 @@ function update() {
 
   requestAnimationFrame(update);
 }
+
+function showOptions() {
+  console.log("It works");
+  if (!optionsIsOpen) {
+    Velocity(document.getElementById('options'), {
+      translateY: 0
+    });
+    Velocity(document.getElementById('options-handle'), {
+      translateY: document.getElementById('options').offsetHeight
+    });
+    optionsIsOpen = true;
+  } else {
+    Velocity(document.getElementById('options'), {
+      translateY: '-100%'
+    });
+    Velocity(document.getElementById('options-handle'), {
+      translateY: 0
+    });
+    optionsIsOpen = false;
+  }
+}
+
+document.getElementById('options-handle').addEventListener('mousedown', showOptions);
 
 window.addEventListener('mousemove', mouseMove);
 window.addEventListener('resize', resize);
