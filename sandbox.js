@@ -2,6 +2,7 @@ var canvas = document.getElementById("canvas"),
   context = canvas.getContext("2d"),
   width = canvas.width = window.innerWidth,
   height = canvas.height = window.innerHeight,
+  mouseDown = false,
   mousePosX,
   mousePosY,
   angle,
@@ -12,7 +13,7 @@ var canvas = document.getElementById("canvas"),
   GRAVITY = 0, // how much gravity affects the particles
   PARTICLES = 1000, // the amount of particles generated
   RADIUS = 10, // the radius of the particles
-  FRICTION = 0.1, // MUST be less than 1. how much the particles slow down
+  FRICTION = 0.5, // MUST be less than 1. how much the particles slow down
   FRICTION_ENABLED = true,
   DISTANCE = 200, // how close the mouse must be to the particles to affect them
   REPULSIVENESS = 250, // how much the mouse pushes the particles (higher = less repulsive)
@@ -40,6 +41,10 @@ function update() {
       accelerate.setAngle(angle);
     }
 
+    if (mouseDown) {
+      accelerate.setLength(accelerate.getLength() * -1);
+    }
+
     // friction
     if (FRICTION_ENABLED) {
       orbs[i].velocity.setX(orbs[i].velocity.getX() - orbs[i].velocity.getX() / friction);
@@ -48,6 +53,7 @@ function update() {
     // if the mouse is close enough, accelerate the particle
     if (distance < DISTANCE) {
       orbs[i].accelerate(accelerate);
+
     }
 
     // detect edge collisions
@@ -85,6 +91,13 @@ function update() {
 
 window.addEventListener('mousemove', mouseMove);
 window.addEventListener('resize', resize);
+
+document.body.onmousedown = function () {
+  mouseDown = true;
+};
+document.body.onmouseup = function () {
+  mouseDown = false;
+};
 
 function mouseMove(e) {
   if (e.pageX || e.pageY) {
