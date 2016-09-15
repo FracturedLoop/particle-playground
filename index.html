@@ -3,14 +3,17 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Canvas</title>
+  <title>Particle Playground</title>
   <style>
-    html, body {
+    html,
+    body {
       margin: 0px;
     }
 
     canvas {
+      position: fixed;
       display: block;
+      bottom: 0;
     }
 
     #options {
@@ -22,36 +25,52 @@
       background-color: #455a64;
       padding: 15px;
       box-sizing: border-box;
-      /*transform: translate(0, -100%);*/
+      color: #fff;
+      font-family: sans-serif;
     }
 
     #options-handle {
       position: fixed;
       top: 0;
       left: 0;
-      height: 5%;
-      width: 5%;
+      /*height: 5%;
+      width: 5%;*/
       background-color: #455a64;
-      border-radius: 0 0 25% 0;
+      border-radius: 0 0 5px 0;
+      color: #fff;
+      font-family: sans-serif;
+      padding: 1%;
+    }
+
+    input {
+      margin: 5px;
+      border: 2px solid #00c853;
+      border-radius: 5px;
+    }
+
+    button {
+      margin: 5px;
+      border: 2px solid #00c853;
+      border-radius: 5px;
+      background-color: #fff;
     }
   </style>
 </head>
 
 <body id="body" style="text-align: center;">
   <canvas id="canvas"></canvas>
-
   <div id="options">
-    <input type="number" id="gravity" />
-    <input type="number" id="friction" />
-    <input type="number" id="distance" />
-    <input type="number" id="repulsiveness" />
-    <input type="number" id="particle-count" />
-    <input type="number" id="particle-radius" />
-    <input type="checkbox" id="friction-enabled" />
+    Gravity: <input type="number" id="gravity" placeholder="Default: 0" />
+    Friction: <input type="number" id="friction" placeholder="Default: 0.5" />
+    Mouse effect radius: <input type="number" id="distance" placeholder="Default: 200" />
+    Mouse effect strength: <input type="number" id="repulsiveness" placeholder="Default: 250" />
+    <br />
+    Particle count: <input type="number" id="particle-count" placeholder="Default: 1000" />
+    Particle radius: <input type="number" id="particle-radius" placeholder="Default: 10" />
+    Disable friction? <input type="checkbox" id="friction-disabled" />
+    <button id="submit-button" onclick="setup()">Submit and Relaunch</button>
   </div>
-  <div id="options-handle">
-
-  </div>
+  <div id="options-handle"> Options </div>
 </body>
 <script src="velocity.min.js"></script>
 <script src="vector.js"></script>

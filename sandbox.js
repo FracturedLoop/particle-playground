@@ -20,20 +20,63 @@ var canvas = document.getElementById("canvas"),
   REPULSIVENESS = 250, // how much the mouse pushes the particles (higher = less repulsive)
   friction = (1 - FRICTION) * 1000;
 
-for (var i = 0; i < PARTICLES; i++) {
-  orbs.push(particle.create(width / 2, height / 2, Math.random() * 10 + 1, 2 * Math.PI * Math.random(), GRAVITY));
-  orbs[i].radius = RADIUS;
-  orbs[i].bounce = -0.9;
-}
+
 
 Velocity(document.getElementById('options'), {
-  translateY: 0
+  translateY: '-100%'
 });
 Velocity(document.getElementById('options-handle'), {
-  translateY: document.getElementById('options').offsetHeight
+  translateY: 0
 });
-optionsIsOpen = true;
 
+
+function setup() {
+  orbs = [];
+
+  var gravityValue = document.getElementById('gravity').value;
+  if (gravityValue !== "") {
+    GRAVITY = parseFloat(gravityValue);
+  }
+
+  var frictionValue = document.getElementById('friction').value;
+  if (frictionValue !== "") {
+    FRICTION = parseFloat(frictionValue);
+    friction = (1 - FRICTION) * 1000;
+  }
+
+  var distanceValue = document.getElementById('distance').value;
+  if (distanceValue !== "") {
+    DISTANCE = parseInt(distanceValue);
+  }
+
+  var repulseValue = document.getElementById('repulsiveness').value;
+  if (repulseValue !== "") {
+    REPULSIVENESS = parseInt(repulseValue);
+  }
+
+  var particleCountValue = document.getElementById('particle-count').value;
+  if (particleCountValue !== "") {
+    PARTICLES = parseInt(particleCountValue);
+  }
+
+  var particleRadiusValue = document.getElementById('particle-radius').value;
+  if (particleRadiusValue !== "") {
+    RADIUS = parseInt(particleRadiusValue);
+  }
+
+  var frictionDisabledValue = document.getElementById('friction-disabled').chacked;
+  if (frictionDisabledValue) {
+    FRICTION_ENABLED = false;
+  }
+
+  for (var i = 0; i < PARTICLES; i++) {
+    orbs.push(particle.create(width / 2, height / 2, Math.random() * 10 + 1, 2 * Math.PI * Math.random(), GRAVITY));
+    orbs[i].radius = RADIUS;
+    orbs[i].bounce = -0.9;
+  }
+}
+
+setup();
 update();
 
 function update() {
@@ -101,19 +144,25 @@ function update() {
 function showOptions() {
   console.log("It works");
   if (!optionsIsOpen) {
-    Velocity(document.getElementById('options'), {
-      translateY: 0
-    });
     Velocity(document.getElementById('options-handle'), {
       translateY: document.getElementById('options').offsetHeight
     });
+    Velocity(document.getElementById('options'), {
+      translateY: 0
+    });
+    Velocity(canvas, {
+      height: window.innerHeight - document.getElementById('options').offsetHeight
+    });
     optionsIsOpen = true;
   } else {
+    Velocity(document.getElementById('options-handle'), {
+      translateY: 0
+    });
     Velocity(document.getElementById('options'), {
       translateY: '-100%'
     });
-    Velocity(document.getElementById('options-handle'), {
-      translateY: 0
+    Velocity(canvas, {
+      height: window.innerHeight
     });
     optionsIsOpen = false;
   }
