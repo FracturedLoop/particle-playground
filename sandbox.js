@@ -37,10 +37,17 @@ function setup() {
   if (gravityValue !== "") {
     GRAVITY = parseFloat(gravityValue);
   }
+  else {
+    GRAVITY = 0;
+  }
 
   var frictionValue = document.getElementById('friction').value;
   if (frictionValue !== "") {
     FRICTION = parseFloat(frictionValue);
+    friction = (1 - FRICTION) * 1000;
+  }
+  else {
+    FRICTION = 0.5;
     friction = (1 - FRICTION) * 1000;
   }
 
@@ -64,7 +71,7 @@ function setup() {
     RADIUS = parseInt(particleRadiusValue);
   }
 
-  var frictionDisabledValue = document.getElementById('friction-disabled').chacked;
+  var frictionDisabledValue = document.getElementById('friction-disabled').checked;
   if (frictionDisabledValue) {
     FRICTION_ENABLED = false;
   }
