@@ -14,11 +14,15 @@ var canvas = document.getElementById("canvas"),
   GRAVITY = 0, // how much gravity affects the particles
   PARTICLES = 1000, // the amount of particles generated
   RADIUS = 10, // the radius of the particles
-  FRICTION = 0.5, // MUST be less than 1. how much the particles slow down
-  FRICTION_ENABLED = true,
+  FRICTION = 0.1, // MUST be less than 1. how much the particles slow down
+  FRICTION_ENABLED = false,
   DISTANCE = 200, // how close the mouse must be to the particles to affect them
   REPULSIVENESS = 250, // how much the mouse pushes the particles (higher = less repulsive)
-  friction = (1 - FRICTION) * 1000;
+  LAUNCH_VELOCITY = 1,
+  LAUNCH_VARIATION = 10,
+  BOUNCINESS = 0.9,
+  BACKGROUND_COLOR = '#607d8b',
+  PARTICLE_COLOR = "#000";
 
 
 
@@ -36,19 +40,15 @@ function setup() {
   var gravityValue = document.getElementById('gravity').value;
   if (gravityValue !== "") {
     GRAVITY = parseFloat(gravityValue);
-  }
-  else {
+  } else {
     GRAVITY = 0;
   }
 
   var frictionValue = document.getElementById('friction').value;
   if (frictionValue !== "") {
     FRICTION = parseFloat(frictionValue);
-    friction = (1 - FRICTION) * 1000;
-  }
-  else {
-    FRICTION = 0.5;
-    friction = (1 - FRICTION) * 1000;
+  } else {
+    FRICTION = 0.1;
   }
 
   var distanceValue = document.getElementById('distance').value;
@@ -71,15 +71,38 @@ function setup() {
     RADIUS = parseInt(particleRadiusValue);
   }
 
+  var particleBounceValue = document.getElementById('particle-bounce').value;
+  if (particleBounceValue !== "") {
+    BOUNCINESS = parseFloat(particleBounceValue);
+  }
+
+  var particleLaunchSpeed = document.getElementById('launch-speed').value;
+  if (particleLaunchSpeed !== "") {
+    LAUNCH_VELOCITY = parseInt(particleLaunchSpeed);
+  }
+
+  var particleLaunchVariation = document.getElementById('launch-variation').value;
+  if (particleLaunchVariation !== "") {
+    LAUNCH_VARIATION = parseInt(particleLaunchVariation);
+  }
+
   var frictionDisabledValue = document.getElementById('friction-disabled').checked;
-  if (frictionDisabledValue) {
-    FRICTION_ENABLED = false;
+  FRICTION_ENABLED = !frictionDisabledValue;
+
+  var bgColorValue = document.getElementById('bg-color').value;
+  if (bgColorValue != "") {
+    BACKGROUND_COLOR = bgColorValue;
+  }
+
+  var particleColorValue = document.getElementById('particle-color').value;
+  if (particleColorValue != "") {
+    PARTICLE_COLOR = particleColorValue;
   }
 
   for (var i = 0; i < PARTICLES; i++) {
-    orbs.push(particle.create(width / 2, height / 2, Math.random() * 10 + 1, 2 * Math.PI * Math.random(), GRAVITY));
+    orbs.push(particle.create(width / 2, height / 2, Math.random() * LAUNCH_VARIATION + LAUNCH_VELOCITY, 2 * Math.PI * Math.random(), GRAVITY / 60));
     orbs[i].radius = RADIUS;
-    orbs[i].bounce = -0.9;
+    orbs[i].bounce = BOUNCINESS;
   }
 }
 
@@ -88,6 +111,10 @@ update();
 
 function update() {
   context.clearRect(0, 0, width, height);
+  context.fillStyle = BACKGROUND_COLOR;
+  context.fillRect(0, 0, width, height);
+
+  context.fillStyle = PARTICLE_COLOR;
 
   // for each particle...
   for (var i = 0; i < orbs.length; i++) {
@@ -106,31 +133,30 @@ function update() {
 
     // friction
     if (FRICTION_ENABLED) {
-      orbs[i].velocity.setX(orbs[i].velocity.getX() - orbs[i].velocity.getX() / friction);
-      orbs[i].velocity.setY(orbs[i].velocity.getY() - orbs[i].velocity.getY() / friction);
+      orbs[i].velocity.setX(orbs[i].velocity.getX() - orbs[i].velocity.getX() * FRICTION / 10);
+      orbs[i].velocity.setY(orbs[i].velocity.getY() - orbs[i].velocity.getY() * FRICTION / 10);
     }
     // if the mouse is close enough, accelerate the particle
     if (distance < DISTANCE) {
       orbs[i].accelerate(accelerate);
-
     }
 
     // detect edge collisions
     if (orbs[i].position.getX() + orbs[i].radius > width) {
       orbs[i].position.setX(width - orbs[i].radius);
-      orbs[i].velocity.setX(orbs[i].velocity.getX() * orbs[i].bounce);
+      orbs[i].velocity.setX(orbs[i].velocity.getX() * -1 * orbs[i].bounce);
     }
     if (orbs[i].position.getX() - orbs[i].radius < 0) {
       orbs[i].position.setX(orbs[i].radius);
-      orbs[i].velocity.setX(orbs[i].velocity.getX() * orbs[i].bounce);
+      orbs[i].velocity.setX(orbs[i].velocity.getX() * -1 * orbs[i].bounce);
     }
     if (orbs[i].position.getY() + orbs[i].radius > height) {
       orbs[i].position.setY(height - orbs[i].radius);
-      orbs[i].velocity.setY(orbs[i].velocity.getY() * orbs[i].bounce);
+      orbs[i].velocity.setY(orbs[i].velocity.getY() * -1 * orbs[i].bounce);
     }
     if (orbs[i].position.getY() - orbs[i].radius < 0) {
       orbs[i].position.setY(orbs[i].radius);
-      orbs[i].velocity.setY(orbs[i].velocity.getY() * orbs[i].bounce);
+      orbs[i].velocity.setY(orbs[i].velocity.getY() * -1 * orbs[i].bounce);
     }
 
     // update the particle's location
@@ -187,13 +213,13 @@ document.body.onmouseup = function () {
   mouseDown = false;
 };
 
-function mouseMove(e) {
-  if (e.pageX || e.pageY) {
-    mousePosX = e.pageX;
-    mousePosY = e.pageY;
-  } else if (e.clientX || e.clientY) {
-    mousePosX = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-    mousePosY = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+function mouseMove(event) {
+  if (event.pageX || event.pageY) {
+    mousePosX = event.pageX;
+    mousePosY = event.pageY;
+  } else if (event.clientX || e.clientY) {
+    mousePosX = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+    mousePosY = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
   }
 }
 
