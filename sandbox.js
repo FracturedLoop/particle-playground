@@ -204,6 +204,24 @@ function showOptions() {
 document.getElementById('options-handle').addEventListener('mousedown', showOptions);
 
 window.addEventListener('mousemove', mouseMove);
+
+// added touch support here
+// emulate the mouse up
+window.addEventListener('touchend', function(evt){
+  mouseDown = false;
+});
+// emulate touch support here
+// move the mouse position on the start
+window.addEventListener('touchstart', function(evt){
+  var touches = evt.changedTouches;
+  for(var i=0;i<touches.length;i++) {
+    mousePosX = touches[i].pageX;
+    mousePosY = touches[i].pageY;
+  }
+  mouseDown = true;
+});
+
+
 window.addEventListener('resize', resize);
 
 document.body.onmousedown = function () {
