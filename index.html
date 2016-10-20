@@ -80,10 +80,10 @@
     Particle color: <input type="textbox" placeholder="default: #000" id="particle-color" />
     <button id="goFS">Go fullscreen</button>
     <script>
-      var goFS = document.getElementById("goFS");
-      goFS.addEventListener("click", function() {
-      document.canvas.requestFullscreen();
-      }, false);
+    var elem = document.getElementById("canvas");
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    }
     </script>
     <button id="submit-button" onclick="setup()">Submit and Relaunch</button>
   </div>
