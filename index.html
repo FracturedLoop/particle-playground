@@ -78,7 +78,13 @@
     Disable friction? <input type="checkbox" id="friction-disabled" checked/>
     Background color: <input type="textbox" placeholder="default: #607d8b" id="bg-color" />
     Particle color: <input type="textbox" placeholder="default: #000" id="particle-color" />
-
+    <button id="goFS">Go fullscreen</button>
+    <script>
+      var goFS = document.getElementById("goFS");
+      goFS.addEventListener("click", function() {
+      document.body.requestFullscreen();
+      }, false);
+    </script>
     <button id="submit-button" onclick="setup()">Submit and Relaunch</button>
   </div>
   <div id="options-handle"> Options </div>
