@@ -79,7 +79,15 @@
     Background color: <input type="textbox" placeholder="default: #607d8b" id="bg-color" />
     Particle color: <input type="textbox" placeholder="default: #000" id="particle-color" />
     <button onclick="launchFullscreen(document.documentElement);">Fullscreen</button>
-    <script>
+    <button id="submit-button" onclick="setup()">Submit and Relaunch</button>
+  </div>
+  <div id="options-handle"> Options </div>
+</body>
+<script src="velocity.min.js"></script>
+<script src="vector.js"></script>
+<script src="particle.js"></script>
+<script src="sandbox.js"></script>
+<script>
 // Find the right method, call on correct element
 function launchIntoFullscreen(element) {
   if(element.requestFullscreen) {
@@ -92,14 +100,6 @@ function launchIntoFullscreen(element) {
     element.msRequestFullscreen();
   }
 }
-    </script>
-    <button id="submit-button" onclick="setup()">Submit and Relaunch</button>
-  </div>
-  <div id="options-handle"> Options </div>
-</body>
-<script src="velocity.min.js"></script>
-<script src="vector.js"></script>
-<script src="particle.js"></script>
-<script src="sandbox.js"></script>
+</script>
 
 </html>
