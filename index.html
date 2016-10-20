@@ -78,6 +78,7 @@
     Disable friction? <input type="checkbox" id="friction-disabled" checked/>
     Background color: <input type="textbox" placeholder="default: #607d8b" id="bg-color" />
     Particle color: <input type="textbox" placeholder="default: #000" id="particle-color" />
+    <button onclick="launchFullscreen(document.documentElement);">Fullscreen</button>
     <script>
 // Find the right method, call on correct element
 function launchIntoFullscreen(element) {
@@ -91,9 +92,6 @@ function launchIntoFullscreen(element) {
     element.msRequestFullscreen();
   }
 }
-
-// Launch fullscreen for browsers that support it!
-launchIntoFullscreen(document.documentElement); // the whole page
     </script>
     <button id="submit-button" onclick="setup()">Submit and Relaunch</button>
   </div>
