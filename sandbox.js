@@ -23,10 +23,6 @@ var canvas = document.getElementById("canvas"),
   BOUNCINESS = 0.9,
   BACKGROUND_COLOR = '#607d8b',
   PARTICLE_COLOR = "#000";
-//disable
-
-document.onmousedown = function() {return false;};
-
 
 Velocity(document.getElementById('options'), {
   translateY: '-100%'
