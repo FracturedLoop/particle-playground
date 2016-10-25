@@ -12,7 +12,7 @@ var canvas = document.getElementById("canvas"),
   optionsIsOpen = false,
   distance,
   GRAVITY = 0, // how much gravity affects the particles
-  PARTICLES = 1000, // the amount of particles generated
+  PARTICLES = 250, // the amount of particles generated
   RADIUS = 10, // the radius of the particles
   FRICTION = 0.1, // MUST be less than 1. how much the particles slow down
   FRICTION_ENABLED = false,
@@ -23,8 +23,6 @@ var canvas = document.getElementById("canvas"),
   BOUNCINESS = 0.9,
   BACKGROUND_COLOR = '#607d8b',
   PARTICLE_COLOR = "#000";
-
-
 
 Velocity(document.getElementById('options'), {
   translateY: '-100%'
@@ -90,12 +88,12 @@ function setup() {
   FRICTION_ENABLED = !frictionDisabledValue;
 
   var bgColorValue = document.getElementById('bg-color').value;
-  if (bgColorValue != "") {
+  if (bgColorValue !== "") {
     BACKGROUND_COLOR = bgColorValue;
   }
 
   var particleColorValue = document.getElementById('particle-color').value;
-  if (particleColorValue != "") {
+  if (particleColorValue !== "") {
     PARTICLE_COLOR = particleColorValue;
   }
 
@@ -232,13 +230,8 @@ document.body.onmouseup = function () {
 };
 
 function mouseMove(event) {
-  if (event.pageX || event.pageY) {
     mousePosX = event.pageX;
     mousePosY = event.pageY;
-  } else if (event.clientX || e.clientY) {
-    mousePosX = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-    mousePosY = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-  }
 }
 
 function resize() {
